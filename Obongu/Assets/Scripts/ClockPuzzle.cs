@@ -13,6 +13,7 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     public class OnPuzzleEventArgs: EventArgs
     {
         public int chances;
+        public bool isACurse;
     }
 
     // reference variable parameters
@@ -29,17 +30,24 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     private ClockPuzzleZone lastActiveClockPuzzleZone;
     private bool isTouchingZone;
     private int currentChances;
-    private bool hasWon;
+    private Player activePlayer;
+    private enum PuzzleState
+    {
+        won, 
+        lost,
+        incomplete
+    };
+    private PuzzleState puzzleState;
     
     private void Start()
     {
         currentChances = maxChances;
-        hasWon = false;
+        puzzleState = PuzzleState.incomplete;
         isTouchingZone = false;
     }
     private void Update()
     {
-        if (dial.activeInHierarchy && !hasWon)
+        if (dial.activeInHierarchy && puzzleState == PuzzleState.incomplete)
         {
             dial.transform.Rotate(rotateSpeed * Time.deltaTime * Vector3.forward);
             if(dial.TryGetComponent<PolygonCollider2D>(out PolygonCollider2D dialCollider))
@@ -57,14 +65,12 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     }
     public void Interact(Player player)
     {
-        if (puzzleDec.activeSelf == false && hasWon == false)
+        if (puzzleDec.activeSelf == false && puzzleState == PuzzleState.incomplete)
         {
             // if already activated and pressed k again
             if(isTouchingZone == true)
             {
-                hasWon = true;
-                OnAttemptSuccess?.Invoke(this, EventArgs.Empty);
-                GameStateManager.instance.ObtainedKey();
+                OnSuccessfulAttempt(player);
             }
             else
             {
@@ -72,31 +78,37 @@ public class ClockPuzzle : BasePuzzle, IInteractable
                 if(currentChances <= 0)
                 {
                     // game over, send the character to fight minion or permanently half hp
-                    currentChances = 0;
+                    OnFailedAttempt(player);
                 }
                 OnAttemptFailure?.Invoke(this, new OnPuzzleEventArgs()
                 {
-                        chances = currentChances
+                        chances = currentChances,
+                        isACurse = false
                 });
             }
         }
         else
         {
             ActivatePuzzle(player);
+
         }
     }
     public void InteractAlternate(Player player)
     {
-        if(puzzleDec.activeSelf == false)
+        if (puzzleDec.activeSelf == false)
+        {
+            player.GetPlayerCanvas().gameObject.SetActive(true);
             DeActivatePuzzle(player);
+        }
     }
 
     private void ActivatePuzzle(Player player)
     {
         player.SetIsAbleToMove(false);
+        player.GetPlayerCanvas().gameObject.SetActive(false);
         puzzleDec.SetActive(false);
         puzzleFunc.SetActive(true);
-        if (!hasWon)
+        if (puzzleState == PuzzleState.incomplete)
         {
             int randomIndex = (int)(UnityEngine.Random.Range(0, 20)) % clockPuzzleZones.Count;
             lastActiveClockPuzzleZone = clockPuzzleZones[randomIndex];
@@ -112,7 +124,34 @@ public class ClockPuzzle : BasePuzzle, IInteractable
         lastActiveClockPuzzleZone.gameObject.SetActive(false);
         player.SetIsAbleToMove(true);
     }
+    protected override void OnFailedAttempt(Player player)
+    {
+        puzzleState = PuzzleState.lost;
+        currentChances = 0;
+        activePlayer = player;
+    }
 
+    protected override void OnSuccessfulAttempt(Player player)
+    {
+        puzzleState = PuzzleState.won;
+        OnAttemptSuccess?.Invoke(this, EventArgs.Empty);
+        GameStateManager.instance.ObtainedKey();
+    }
+
+    public void FightMinion()
+    {
+        // transfer to the different stage
+    }
+    public void ReduceHalfHp()
+    {
+        // reduce half hp of player
+        activePlayer.DamagePlayer(activePlayer.GetCurrentHp() / 2f);
+        OnAttemptFailure?.Invoke(this, new OnPuzzleEventArgs()
+        {
+            chances = currentChances,
+            isACurse = true
+        });
+    }
     // getter and setter functions
     public int GetMaxChances()
     {

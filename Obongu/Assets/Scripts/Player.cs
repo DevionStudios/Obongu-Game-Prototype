@@ -7,18 +7,24 @@ public class Player : MonoBehaviour
 {
     // events 
     public event EventHandler<OnPlayerMovementEventArgs> OnPlayerMovement;
+    public event EventHandler<OnPlayerDamagedEventArgs> OnPlayerDamaged;
     public event EventHandler OnPlayerAttack;
     public class OnPlayerMovementEventArgs : EventArgs
     {
         public Vector2 movement;
         public Vector2 lastMovementDir;
     }
+    public class OnPlayerDamagedEventArgs : EventArgs
+    {
+        public float currentHp;
+    }
     // control parameters
     [SerializeField] private float movementSpeed;
 
     // reference parameters
-    [SerializeField] LayerMask objectsLayerMask;
-
+    [SerializeField] private LayerMask objectsLayerMask;
+    [SerializeField] private HealthSO playerHealthSO;
+    [SerializeField] private PlayerCanvas playerCanvas;
 
     // inner parameters
     private Rigidbody2D playerRb;
@@ -27,7 +33,8 @@ public class Player : MonoBehaviour
     private Vector2 lastMovementDir;
     private bool isMoving;
     private bool isAbleToMove;
-    
+    private float currentHp;
+
 
     private void Awake()
     {
@@ -54,7 +61,7 @@ public class Player : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, lastMovementDir, movementSpeed, objectsLayerMask);
         if (hit.collider)
         {
-            if(hit.transform.TryGetComponent<ClockPuzzle>(out ClockPuzzle clockPuzzle))
+            if (hit.transform.TryGetComponent<ClockPuzzle>(out ClockPuzzle clockPuzzle))
             {
                 clockPuzzle.Interact(this);
             }
@@ -63,7 +70,7 @@ public class Player : MonoBehaviour
 
     private void InputManager_OnPlayerAttack(object sender, EventArgs e)
     {
-        if(isAbleToMove)
+        if (isAbleToMove)
             OnPlayerAttack?.Invoke(this, EventArgs.Empty);
     }
 
@@ -72,15 +79,16 @@ public class Player : MonoBehaviour
         playerRb = GetComponent<Rigidbody2D>();
         isAbleToMove = true;
         isMoving = false;
+        currentHp = playerHealthSO.maxHp;
     }
     private void Update()
     {
-        if(isAbleToMove)
+        if (isAbleToMove)
             PlayerMovementInputProcessing();
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, lastMovementDir, 1f, objectsLayerMask);
         if (hit.collider)
         {
-            
+            // render something to make player know it is interactable
         }
     }
     private void PlayerMovementInputProcessing()
@@ -120,6 +128,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void DamagePlayer(float damageAmount)
+    {
+        currentHp -= damageAmount;
+        if (currentHp < 0)
+        {
+            currentHp = 0;
+            // render death screen
+            Destroy(gameObject);
+        }
+        OnPlayerDamaged?.Invoke(this, new OnPlayerDamagedEventArgs()
+        {
+            currentHp = this.currentHp
+        });
+    }
     public bool IsPlayerMoving()
     {
         return Math.Abs(movement.x) > 0 || Math.Abs(movement.y) > 0;
@@ -128,5 +150,16 @@ public class Player : MonoBehaviour
     {
         this.isAbleToMove = isAbleToMove;
     }
-
+    public float GetCurrentHp()
+    {
+        return currentHp;
+    }
+    public HealthSO GetHealthSO()
+    {
+        return playerHealthSO;
+    }
+    public PlayerCanvas GetPlayerCanvas()
+    {
+        return playerCanvas;
+    }
 }
