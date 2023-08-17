@@ -28,7 +28,6 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerCanvas playerCanvas;
     [SerializeField] private CameraShake playerCamera;
 
-
     // inner parameters
     private Rigidbody2D playerRb;
     private InputManager inputManager;
@@ -39,7 +38,7 @@ public class Player : MonoBehaviour
     private float currentHp;
     private bool isFightingEnemy;
     private GameStateManager.TeleportPoint prevTeleportPoint;
-
+    private float timeSinceDamageTaken = 0f;
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
@@ -93,7 +92,18 @@ public class Player : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, lastMovementDir, 1f, objectsLayerMask);
         if (hit.collider)
         {
-            // render something to make player know it is interactable
+            if (hit.transform.TryGetComponent<ClockPuzzle>(out ClockPuzzle clockPuzzle))
+            {
+                playerCanvas.SetHintText(true);
+            }
+            else
+            {
+                playerCanvas.SetHintText(false);
+            }
+        }
+        else
+        {
+            playerCanvas.SetHintText(false);
         }
     }
     private void PlayerMovementInputProcessing()
@@ -140,6 +150,7 @@ public class Player : MonoBehaviour
         {
             currentHp = 0;
             // render death screen
+            GameStateManager.instance.PlayerDied();
             Destroy(gameObject);
         }
         OnPlayerDamaged?.Invoke(this, new OnPlayerDamagedEventArgs()
@@ -190,5 +201,9 @@ public class Player : MonoBehaviour
     public void SetTeleportPoint(GameStateManager.TeleportPoint tp)
     {
         this.prevTeleportPoint = tp;
+    }
+    public Vector2 GetLastMovementDir()
+    {
+        return this.lastMovementDir;
     }
 }

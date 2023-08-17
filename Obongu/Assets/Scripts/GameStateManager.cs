@@ -8,7 +8,8 @@ public class GameStateManager : MonoBehaviour
     //events
     public static event EventHandler<OnKeyObtainEventArgs> OnKeyObtain;
     public static event EventHandler OnTeleportPlayer;
-
+    public static event EventHandler OnWin;
+    public static event EventHandler OnLose;
 
     public class OnKeyObtainEventArgs : EventArgs
     {
@@ -27,8 +28,13 @@ public class GameStateManager : MonoBehaviour
     // reference variables
     [SerializeField] TeleportPoint[] teleportPoints;
     [SerializeField] GameObject enemyPrefab;
+    [SerializeField] GameObject bossPrefab;
     [SerializeField] Transform enemySpawnPoint;
+    [SerializeField] Transform bossSpawnPoint;
+    [SerializeField] Transform bossArenaPoint;
     [SerializeField] Transform exitGate;
+    [SerializeField] Transform bossGate;
+
     // instance 
     public static GameStateManager instance;
 
@@ -49,8 +55,13 @@ public class GameStateManager : MonoBehaviour
         BasePuzzle[] puzzles = FindObjectsOfType<BasePuzzle>();
         totalKeys = puzzles.Length;
         exitGate.gameObject.SetActive(false);
+        bossGate.gameObject.SetActive(false);
     }
 
+    public void PlayerDied()
+    {
+        OnLose?.Invoke(this, EventArgs.Empty);
+    }
     public void ObtainedKey()
     {
         keyObtained++;
@@ -60,8 +71,14 @@ public class GameStateManager : MonoBehaviour
         });
         if(keyObtained == totalKeys)
         {
-            // logic to open final gate
-            Debug.Log("Open gate");
+            bossGate.gameObject.SetActive(true);
+            bossGate.GetComponent<Gate>().GateOpen();
+        }
+        if(keyObtained == totalKeys+1)
+        {
+            // You have won the game
+            Debug.Log("won!");
+            OnWin?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -80,6 +97,11 @@ public class GameStateManager : MonoBehaviour
                 return;
             }
         }
+    }
+    public void TeleportPlayerToBoss(Player player)
+    {
+        Instantiate(bossPrefab, bossSpawnPoint.transform.position, bossPrefab.transform.rotation);
+        player.transform.position = bossArenaPoint.position;
     }
     public void ActivateExitGate()
     {

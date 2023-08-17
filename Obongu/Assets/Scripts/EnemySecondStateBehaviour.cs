@@ -30,6 +30,7 @@ public class EnemySecondStateBehaviour : StateMachineBehaviour
         {
             player.SetIsFightingEnemy(false);
             GameStateManager.instance.ActivateExitGate();
+            GameStateManager.instance.ObtainedKey();
             animator.SetTrigger("Death");
         }
         if (Vector2.Distance(player.transform.position, enemyRb.position) <= enemy.GetAttackRange())

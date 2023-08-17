@@ -149,21 +149,28 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     {
         // transfer to the different stage
         DeActivatePuzzle(activePlayer);
-        GameStateManager.instance.ObtainedKey();
         activePlayer.GetPlayerCanvas().gameObject.SetActive(true);
         GameStateManager.instance.TeleportPlayer((BasePuzzle)this, activePlayer);
+        activePlayer.SetIsAbleToMove(true);
+        SelfDestruct();
     }
     public void ReduceHalfHp()
     {
         // reduce half hp of player
         activePlayer.DamagePlayer(activePlayer.GetCurrentHp() / 2f);
         GameStateManager.instance.ObtainedKey();
+        activePlayer.SetIsAbleToMove(true);
         activePlayer.GetPlayerCanvas().gameObject.SetActive(true);
         OnAttemptFailure?.Invoke(this, new OnPuzzleEventArgs()
         {
             chances = currentChances,
             isACurse = true
         });
+        SelfDestruct();
+    }
+    public void SelfDestruct()
+    {
+        Destroy(gameObject);
     }
     // getter and setter functions
     public int GetMaxChances()
