@@ -24,7 +24,7 @@ public class ClockPuzzleCanvas : MonoBehaviour
         failureGameObject.SetActive(false);
         clockPuzzleChanceText.text = clockPuzzle.GetMaxChances().ToString();
     }
-    private void ClockPuzzle_OnAttemptSuccess(object sender, System.EventArgs e)
+    private void ClockPuzzle_OnAttemptSuccess(object sender, ClockPuzzle.OnAttemptSuccessEventArgs e)
     {
         successTextGameObject.SetActive(true);
     }

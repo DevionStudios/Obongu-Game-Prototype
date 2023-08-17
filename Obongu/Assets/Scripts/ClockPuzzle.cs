@@ -7,13 +7,17 @@ public class ClockPuzzle : BasePuzzle, IInteractable
 {
     // events
     public event EventHandler<OnPuzzleEventArgs> OnAttemptFailure;
-    public event EventHandler OnAttemptSuccess;
+    public event EventHandler<OnAttemptSuccessEventArgs> OnAttemptSuccess;
     public event EventHandler OnInteractEvent;
 
     public class OnPuzzleEventArgs: EventArgs
     {
         public int chances;
         public bool isACurse;
+    }
+    public class OnAttemptSuccessEventArgs: EventArgs
+    {
+        public Player player;
     }
 
     // reference variable parameters
@@ -90,7 +94,6 @@ public class ClockPuzzle : BasePuzzle, IInteractable
         else
         {
             ActivatePuzzle(player);
-
         }
     }
     public void InteractAlternate(Player player)
@@ -113,6 +116,7 @@ public class ClockPuzzle : BasePuzzle, IInteractable
             int randomIndex = (int)(UnityEngine.Random.Range(0, 20)) % clockPuzzleZones.Count;
             lastActiveClockPuzzleZone = clockPuzzleZones[randomIndex];
         }
+        player.SetIsAbleToMove(false);
         lastActiveClockPuzzleZone.gameObject.SetActive(true);
         OnInteractEvent?.Invoke(this, EventArgs.Empty);
     }
@@ -134,18 +138,27 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     protected override void OnSuccessfulAttempt(Player player)
     {
         puzzleState = PuzzleState.won;
-        OnAttemptSuccess?.Invoke(this, EventArgs.Empty);
+        OnAttemptSuccess?.Invoke(this, new OnAttemptSuccessEventArgs()
+        {
+            player = player
+        });
         GameStateManager.instance.ObtainedKey();
     }
 
     public void FightMinion()
     {
         // transfer to the different stage
+        DeActivatePuzzle(activePlayer);
+        GameStateManager.instance.ObtainedKey();
+        activePlayer.GetPlayerCanvas().gameObject.SetActive(true);
+        GameStateManager.instance.TeleportPlayer((BasePuzzle)this, activePlayer);
     }
     public void ReduceHalfHp()
     {
         // reduce half hp of player
         activePlayer.DamagePlayer(activePlayer.GetCurrentHp() / 2f);
+        GameStateManager.instance.ObtainedKey();
+        activePlayer.GetPlayerCanvas().gameObject.SetActive(true);
         OnAttemptFailure?.Invoke(this, new OnPuzzleEventArgs()
         {
             chances = currentChances,

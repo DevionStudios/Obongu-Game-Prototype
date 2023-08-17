@@ -24,7 +24,8 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Player_OnPlayerAttack(object sender, System.EventArgs e)
     {
-        playerAnimator.SetTrigger(ATTACK_TRIGGER);
+        if(playerAnimator != null)
+            playerAnimator.SetTrigger(ATTACK_TRIGGER);
     }
 
     private void Player_OnPlayerMovement(object sender, Player.OnPlayerMovementEventArgs e)

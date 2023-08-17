@@ -18,13 +18,16 @@ public class Player : MonoBehaviour
     {
         public float currentHp;
     }
-    // control parameters
+    // configure parameters
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float attackDamage = 50f;
 
     // reference parameters
     [SerializeField] private LayerMask objectsLayerMask;
     [SerializeField] private HealthSO playerHealthSO;
     [SerializeField] private PlayerCanvas playerCanvas;
+    [SerializeField] private CameraShake playerCamera;
+
 
     // inner parameters
     private Rigidbody2D playerRb;
@@ -34,7 +37,8 @@ public class Player : MonoBehaviour
     private bool isMoving;
     private bool isAbleToMove;
     private float currentHp;
-
+    private bool isFightingEnemy;
+    private GameStateManager.TeleportPoint prevTeleportPoint;
 
     private void Awake()
     {
@@ -79,6 +83,7 @@ public class Player : MonoBehaviour
         playerRb = GetComponent<Rigidbody2D>();
         isAbleToMove = true;
         isMoving = false;
+        isFightingEnemy = false;
         currentHp = playerHealthSO.maxHp;
     }
     private void Update()
@@ -152,14 +157,38 @@ public class Player : MonoBehaviour
     }
     public float GetCurrentHp()
     {
-        return currentHp;
+        return this.currentHp;
     }
     public HealthSO GetHealthSO()
     {
-        return playerHealthSO;
+        return this.playerHealthSO;
     }
     public PlayerCanvas GetPlayerCanvas()
     {
-        return playerCanvas;
+        return this.playerCanvas;
+    }
+    public float GetPlayerAttackDamage()
+    {
+        return this.attackDamage;
+    }
+    public CameraShake GetPlayerCamera()
+    {
+        return playerCamera;
+    }
+    public void SetIsFightingEnemy(bool isFighting)
+    {
+        this.isFightingEnemy = isFighting;
+    }
+    public bool GetIsFightingEnemy()
+    {
+        return this.isFightingEnemy;
+    }
+    public GameStateManager.TeleportPoint GetTeleportPoint()
+    {
+        return prevTeleportPoint;
+    }    
+    public void SetTeleportPoint(GameStateManager.TeleportPoint tp)
+    {
+        this.prevTeleportPoint = tp;
     }
 }

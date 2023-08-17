@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465ed750738d22b45964e32c109b5c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5099841015423026833}
 --- !u!1 &1839031791103240419
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,11 +250,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  attackDamage: 50
   objectsLayerMask:
     serializedVersion: 2
     m_Bits: 64
   playerHealthSO: {fileID: 11400000, guid: f28fa8fffd73b4643935f7949bea1073, type: 2}
   playerCanvas: {fileID: 3200208612815359040}
+  playerCamera: {fileID: 4085858130597163325}
 --- !u!114 &7588610437182557035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +387,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -32332265
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -53248616, guid: cd9a2b6a5083f714da2aaee1461baaaf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -451,6 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4004598163375248329}
   - component: {fileID: 5665585512445476949}
+  - component: {fileID: 4085858130597163325}
   m_Layer: 0
   m_Name: PlayerMainCam
   m_TagString: Untagged
@@ -513,6 +517,20 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 5913450340916531966}
+--- !u!114 &4085858130597163325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2387877606035274531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce671e630bc0c044b5b611763ad5d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeIntensity: 1
+  shakeTime: 0.5
 --- !u!1 &2869581239958893639
 GameObject:
   m_ObjectHideFlags: 0
@@ -716,6 +734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465ed750738d22b45964e32c109b5c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5099841015423026833}
 --- !u!1 &4128341467791917738
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,6 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465ed750738d22b45964e32c109b5c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5099841015423026833}
 --- !u!1 &5661042578154975066
 GameObject:
   m_ObjectHideFlags: 0
