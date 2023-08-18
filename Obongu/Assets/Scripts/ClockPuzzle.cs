@@ -71,8 +71,9 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     {
         if (puzzleDec.activeSelf == false && puzzleState == PuzzleState.incomplete)
         {
+            AudioManager.instance.PlaySound("interact");
             // if already activated and pressed k again
-            if(isTouchingZone == true)
+            if (isTouchingZone == true)
             {
                 OnSuccessfulAttempt(player);
             }
@@ -98,15 +99,13 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     }
     public void InteractAlternate(Player player)
     {
-        if (puzzleDec.activeSelf == false)
-        {
             player.GetPlayerCanvas().gameObject.SetActive(true);
             DeActivatePuzzle(player);
-        }
     }
 
     private void ActivatePuzzle(Player player)
     {
+        AudioManager.instance.PlaySound("interact");
         player.SetIsAbleToMove(false);
         player.GetPlayerCanvas().gameObject.SetActive(false);
         puzzleDec.SetActive(false);
@@ -125,30 +124,36 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     {
         puzzleFunc.SetActive(false);
         puzzleDec.SetActive(true);
+        AudioManager.instance.PlaySound("interact");
         lastActiveClockPuzzleZone.gameObject.SetActive(false);
         player.SetIsAbleToMove(true);
     }
     protected override void OnFailedAttempt(Player player)
     {
         puzzleState = PuzzleState.lost;
+        AudioManager.instance.PlaySound("puzzlefail");
         currentChances = 0;
         activePlayer = player;
     }
 
     protected override void OnSuccessfulAttempt(Player player)
     {
-        puzzleState = PuzzleState.won;
-        OnAttemptSuccess?.Invoke(this, new OnAttemptSuccessEventArgs()
+        if (puzzleState == PuzzleState.incomplete)
         {
-            player = player
-        });
-        GameStateManager.instance.ObtainedKey();
+            puzzleState = PuzzleState.won;
+            OnAttemptSuccess?.Invoke(this, new OnAttemptSuccessEventArgs()
+            {
+                player = player
+            });
+            GameStateManager.instance.ObtainedKey();
+        }
     }
 
     public void FightMinion()
     {
         // transfer to the different stage
         DeActivatePuzzle(activePlayer);
+        AudioManager.instance.PlaySound("interact");
         activePlayer.GetPlayerCanvas().gameObject.SetActive(true);
         GameStateManager.instance.TeleportPlayer((BasePuzzle)this, activePlayer);
         activePlayer.SetIsAbleToMove(true);
@@ -158,6 +163,7 @@ public class ClockPuzzle : BasePuzzle, IInteractable
     {
         // reduce half hp of player
         activePlayer.DamagePlayer(activePlayer.GetCurrentHp() / 2f);
+        AudioManager.instance.PlaySound("interact");
         GameStateManager.instance.ObtainedKey();
         activePlayer.SetIsAbleToMove(true);
         activePlayer.GetPlayerCanvas().gameObject.SetActive(true);

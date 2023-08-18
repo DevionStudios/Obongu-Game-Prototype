@@ -16,7 +16,8 @@ public class CameraShake : MonoBehaviour
     {
         playerCamera = GetComponent<CinemachineVirtualCamera>();
         CinemachineBasicMultiChannelPerlin _cbmcp = playerCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        initialAmplitude = _cbmcp.m_AmplitudeGain;    
+        initialAmplitude = 0.5f;
+        _cbmcp.m_AmplitudeGain = initialAmplitude;
     }
     public void ShakeCamera()
     {

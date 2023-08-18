@@ -164,11 +164,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 5493174e7d588bb4785bad62739bcaf3, type: 2}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: attackRange
-      value: 2
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: skillDamage
@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: attackDamage
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: skillInterval
@@ -188,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128813345110948523, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: hpReductionInPhase2
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4149892004128029377, guid: 2b5858a92ed42e1418b99b99522c08af, type: 3}
       propertyPath: m_IsActive

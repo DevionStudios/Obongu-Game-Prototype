@@ -4,6 +4,9 @@ using UnityEngine;
 using System;
 public class Enemy : MonoBehaviour
 {
+    //constants
+    private const string ENEMY_HURT_SFX_NAME = "enemy-hurt";
+    private const string ENEMY_DEATH_SFX_NAME = "boss-death";
     //events
     public event EventHandler<OnEnemyAttackedEventArgs> OnEnemyAttacked;
     public event EventHandler OnEnemyDead;
@@ -57,11 +60,12 @@ public class Enemy : MonoBehaviour
         if (!isTransitioningToSecondState)
         {
             currentHP -= damageAmount - currentHpReduction;
-            if (currentHP < 0)
+            if (currentHP <= 0)
             {
                 currentHP = 0f;
                 OnEnemyDead?.Invoke(this, EventArgs.Empty);
             }
+            AudioManager.instance.PlaySound(ENEMY_HURT_SFX_NAME);
             OnEnemyAttacked?.Invoke(this, new OnEnemyAttackedEventArgs()
             {
                 currentHP = this.currentHP
@@ -119,5 +123,10 @@ public class Enemy : MonoBehaviour
     public void SetIsTransitioningToSecondState(bool transitionState)
     {
         this.isTransitioningToSecondState = transitionState;
+    }
+
+    private void OnDestroy()
+    {
+        GameStateManager.instance.ObtainedKey();
     }
 }

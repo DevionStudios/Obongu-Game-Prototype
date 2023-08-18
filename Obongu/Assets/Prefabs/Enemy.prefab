@@ -665,12 +665,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdf9a7ef33c1f68409e8c12458e1a502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 2.8
   attackRange: 1.8
-  attackInterval: 1
-  skillInterval: 1
+  attackInterval: 2
+  skillInterval: 3
   attackDamage: 10
-  skillDamage: 30
+  skillDamage: 25
+  hpReductionInPhase2: 10
   healthSO: {fileID: 11400000, guid: c5015873135aefd4fab85c30549d79af, type: 2}
 --- !u!1 &5776445777296431131
 GameObject:

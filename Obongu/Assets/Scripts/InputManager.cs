@@ -16,6 +16,15 @@ public class InputManager : MonoBehaviour
         playerActionInput.BaseAbilities.Attack.performed += Attack_performed;
         playerActionInput.BaseAbilities.Interact.performed += Interact_performed;
         playerActionInput.BaseAbilities.AltInteract.performed += AltInteract_performed;
+        LevelManager.OnSceneChange += Instance_OnSceneChange;
+    }
+
+    private void Instance_OnSceneChange(object sender, EventArgs e)
+    {
+        playerActionInput.BaseAbilities.Attack.performed -= Attack_performed;
+        playerActionInput.BaseAbilities.Interact.performed -= Interact_performed;
+        playerActionInput.BaseAbilities.AltInteract.performed -= AltInteract_performed;
+        LevelManager.OnSceneChange -= Instance_OnSceneChange;
     }
 
     private void AltInteract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

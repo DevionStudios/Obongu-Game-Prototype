@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2092366176804569252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3570837213171464452}
+  - component: {fileID: 5961343899328177726}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3570837213171464452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092366176804569252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.7403193, y: 4.0454063, z: 0.28698108}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5961343899328177726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092366176804569252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c27c1939b4140d14a905a54583ed704b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: slash
+    clip: {fileID: 8300000, guid: 44c109e0c3af66d4e8143fa018c09dc5, type: 3}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: interact
+    clip: {fileID: 8300000, guid: 91912f60d5997eb418c36598993d053b, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: puzzlefail
+    clip: {fileID: 8300000, guid: a8247f0406276ea4c9a84bef384e7725, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: player-hurt
+    clip: {fileID: 8300000, guid: bd1b8aa357998cd4fbc40466400d063d, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: death
+    clip: {fileID: 8300000, guid: 639cadff1674ded45b0aa7b49f92ebe7, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: enemy-hurt
+    clip: {fileID: 8300000, guid: e2aaec294e8e4854ab1b4bec20981357, type: 3}
+    volume: 1
+    pitch: 2.5
+    source: {fileID: 0}
+    loop: 0
+  - name: boss-death
+    clip: {fileID: 8300000, guid: 23a3f701f753d864e8324060c76dfb37, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: theme
+    clip: {fileID: 8300000, guid: 9028fda001ae8de4ab492798a7a17433, type: 3}
+    volume: 0.08
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0

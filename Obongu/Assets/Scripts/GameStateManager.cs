@@ -35,6 +35,11 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] Transform exitGate;
     [SerializeField] Transform bossGate;
 
+    // sfx variables
+    [SerializeField] AudioClip mainThemeClip;
+    [SerializeField] AudioClip enemyClip;
+    [SerializeField] AudioClip bossClip;
+
     // instance 
     public static GameStateManager instance;
 
@@ -44,7 +49,10 @@ public class GameStateManager : MonoBehaviour
     private void Awake()
     {
         if (instance != null)
-            Debug.LogError("Warning, more than one instances of " + this.name);
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
         DontDestroyOnLoad(this);
     }
@@ -61,6 +69,7 @@ public class GameStateManager : MonoBehaviour
     public void PlayerDied()
     {
         OnLose?.Invoke(this, EventArgs.Empty);
+        AudioManager.instance.ChangeAudioClip(mainThemeClip);
     }
     public void ObtainedKey()
     {
@@ -76,8 +85,8 @@ public class GameStateManager : MonoBehaviour
         }
         if(keyObtained == totalKeys+1)
         {
-            // You have won the game
-            Debug.Log("won!");
+            AudioManager.instance.ChangeAudioClip(mainThemeClip);
+            keyObtained = 0;
             OnWin?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -89,6 +98,7 @@ public class GameStateManager : MonoBehaviour
             if(teleportPoint.teleportPointSO.id == basePuzzle.teleportPointSO.id)
             {
                 exitGate.gameObject.SetActive(false);
+                AudioManager.instance.ChangeAudioClip(enemyClip);
                 Instantiate(enemyPrefab, enemySpawnPoint.transform.position, enemyPrefab.transform.rotation);
                 player.transform.position = teleportPoint.destinationTransform.position;
                 player.SetIsFightingEnemy(true);
@@ -100,11 +110,13 @@ public class GameStateManager : MonoBehaviour
     }
     public void TeleportPlayerToBoss(Player player)
     {
+        AudioManager.instance.ChangeAudioClip(bossClip);
         Instantiate(bossPrefab, bossSpawnPoint.transform.position, bossPrefab.transform.rotation);
         player.transform.position = bossArenaPoint.position;
     }
     public void ActivateExitGate()
     {
+        AudioManager.instance.ChangeAudioClip(mainThemeClip);
         exitGate.gameObject.SetActive(true);
     }
 }
