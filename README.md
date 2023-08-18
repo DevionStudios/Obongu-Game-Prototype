@@ -13,3 +13,5 @@ The steps to run the project in local-
 ### Gameplay
 
 Here is a youtube video link to gameplay-
+
+[Youtube Video](https://youtu.be/WdCUS_Wal68)
